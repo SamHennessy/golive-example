@@ -1,0 +1,7 @@
+# golangci.com configuration
+# https://github.com/golangci/golangci/wiki/Configuration
+linters:
+  enable-all: true
+
+service:
+  golangci-lint-version: 1.33.x # use the fixed version to not introduce new linters unexpectedly

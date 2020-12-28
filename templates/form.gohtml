@@ -1,0 +1,25 @@
+<div class="ui container">
+
+    <div class="ui form">
+        <div class="inline field">
+            <label for="add">Task</label>
+            <input go-live-input="InputText" type="text" name="add" value="{{ .InputText }}" placeholder="Task">
+        </div>
+        <button class="ui button" type="submit" {{ if not .CanAdd }}disabled{{ end }} go-live-click="HandleAdd">Add</button>
+    </div>
+    <div class="ui hidden divider"></div>
+    <div class="todo-tasks">
+        <div class="ui form">
+            {{ range $index, $task := .Tasks }}
+                <div class="inline field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" tabindex="0" go-live-input="Tasks.{{$index}}.Done" {{- if $task.Done }} checked{{ end }}>
+                        <label class="{{ if $task.Done }}task-done{{ end }}">{{ $task.Text }}</label>
+                    </div>
+                </div>
+
+            {{ end }}
+        </div>
+    </div>
+
+</div>
