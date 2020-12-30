@@ -18,9 +18,23 @@ func main() {
 	ds := domain.NewService()
 	liveServer := golive.NewServer()
 
+	logger := golive.NewLoggerBasic()
+	logger.Level = golive.LogDebug
+	liveServer.Log = logger.Log
+
 	var livePage golive.PageContent
 	livePage.Lang = "us"
 	livePage.Title = "Example Application for GoLive"
+
+	// baseFileBytes, err := ioutil.ReadFile("./base_html.gohtml")
+	// if err != nil {
+	// 	panic(fmt.Errorf("ERROR: read head template file: %w", err))
+	// }
+	//
+	// golive.BasePage, err = template.New("BasePage").Parse(string(baseFileBytes))
+	// if err != nil {
+	// 	panic(fmt.Errorf("ERROR: parse base template file: %w", err))
+	// }
 
 	headFileBytes, err := ioutil.ReadFile("templates/head.gohtml")
 	if err != nil {

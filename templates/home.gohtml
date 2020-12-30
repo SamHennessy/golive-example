@@ -1,19 +1,32 @@
-<div class="ui head container">
-    <div class="ui hidden divider"></div>
-    <div class="ui menu">
-        <div class="header item">
+<nav class="navbar is-fixed-top has-shadow is-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
             <img class="logo" src="/img/gopher.png">
-             Example For GoLive
+        </a>
+        <div class="navbar-item">
+            Example For GoLive
         </div>
-        <a class="item">
+    </div>
+    <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/SamHennessy/golive-example">
             GitHub
         </a>
-        <a class="item">
+        <a class="navbar-item" href="https://github.com/brendonferreira/golive">
             GoLive
         </a>
     </div>
 
-    <h1 class="ui header">ToDo List</h1>
-    <div class="ui hidden divider"></div>
-</div>
+</nav>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">ToDo List</h1>
+        <h2 class="subtitle">
+            Use this ToDo list to help manage your tasks.
+        </h2>
+        <span class="has-text-weight-light">A simple cookie is used to manage a browser session.</span>
+    </div>
+</section>
+
+
 {{ render .Form }}

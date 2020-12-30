@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 
 	"github.com/SamHennessy/golive-example/internal/domain"
-	"github.com/SamHennessy/golive-example/internal/middleware"
 	"github.com/brendonferreira/golive"
 )
 
@@ -20,8 +19,6 @@ func NewHome(ds *domain.Service) func(ctx context.Context) *golive.LiveComponent
 	newForm := NewForm(ds)
 
 	return func(ctx context.Context) *golive.LiveComponent {
-		fmt.Println(middleware.GetSessionID(ctx))
-
 		var c Home
 		c.Form = newForm(ctx)
 

@@ -1,25 +1,79 @@
-<div class="ui container">
+<div class="columns is-mobile is-centered is-clipped">
+    <div id="add-task-modal" class="modal {{- if .ShowModal }} is-active animate__animated animate__fadeIn{{ end }}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
 
-    <div class="ui form">
-        <div class="inline field">
-            <label for="add">Task</label>
-            <input go-live-input="InputText" type="text" name="add" value="{{ .InputText }}" placeholder="Task">
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Add New Task</p>
+                    <button class="delete" aria-label="close" go-live-click="HandleHideModal"></button>
+                </header>
+                <section class="modal-card-body">
+
+                    <label for="add">Task</label>
+                    <div class="control has-icons-right">
+                        <input class="input is-large {{- if .InputInvalid }} is-danger{{ else if .CanAdd }} is-success{{ end }}" go-live-input="InputText" type="text" name="add" value="{{ .InputText }}" placeholder="Task" autofocus>
+                        <span id="task-add-icon" class="icon is-large is-right">
+                            <i id="task-add-icon-i" class="mdi {{ if .CanAdd }} has-text-success mdi-check {{ else if .InputInvalid }} has-text-danger mdi-alert-circle {{ else }} mdi-asterisk{{ end }}"></i>
+                        </span>
+                    </div>
+
+                    <div id="validation-message" class="has-text-danger {{- if .InputInvalid }} animate__animated animate__fadeIn{{ else }} animate__animated animate__fadeOut{{ end }}">{{ .InputInvalid }}</div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-primary" {{ if not .CanAdd }}disabled{{ end }} go-live-click="HandleAdd">Add</button>
+                    <button class="button" go-live-click="HandleHideModal">Cancel</button>
+                </footer>
+            </div>
+
         </div>
-        <button class="ui button" type="submit" {{ if not .CanAdd }}disabled{{ end }} go-live-click="HandleAdd">Add</button>
     </div>
-    <div class="ui hidden divider"></div>
-    <div class="todo-tasks">
-        <div class="ui form">
-            {{ range $index, $task := .Tasks }}
-                <div class="inline field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" tabindex="0" go-live-input="Tasks.{{$index}}.Done" {{- if $task.Done }} checked{{ end }}>
-                        <label class="{{ if $task.Done }}task-done{{ end }}">{{ $task.Text }}</label>
+
+    <div class="column is-half">
+
+        <div class="box">
+
+            {{ render .Clock }}
+
+            <div class="columns">
+                <div class="column has-text-centered">
+                    <span id="icon-add-task" class="icon is-large has-text-primary is-clickable" go-live-click="HandleShowModal">
+                        <i class="mdi icon-huge mdi-plus-circle"></i>
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="columns">
+                <div class="column">
+                  {{ .TabCount }} Tasks
+
+                    <div class="tabs is-centered">
+                        <ul>
+                            <li class="{{ if eq .Tab "all" }}is-active{{ end }}"><a go-live-click="ShowTabAll">All</a></li>
+                            <li class="{{ if eq .Tab "todo" }}is-active{{ end }}"><a go-live-click="ShowTabTodo">ToDo</a></li>
+                            <li class="{{ if eq .Tab "done" }}is-active{{ end }}"><a go-live-click="ShowTabDone">Done</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="columns">
+                <div class="column">
+                    <div class="todo-tasks">
+                        {{ range $index, $task := .Tasks }}
+                            {{ if $.ShowTask $task }}
+                            <div>
+                                <input type="checkbox" tabindex="0" go-live-input="Tasks.{{$index}}.Done" class="task-checkbox" {{- if $task.Done }} checked{{ end }}>
+                                <label class="is-size-4 {{ if $task.Done }}task-done{{ end }}">{{ $task.Text }}</label>
+                            </div>
+                            {{ end }}
+                        {{ end }}
                     </div>
                 </div>
+            </div>
 
-            {{ end }}
         </div>
     </div>
-
 </div>

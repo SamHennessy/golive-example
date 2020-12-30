@@ -1,8 +1,24 @@
-.ui.menu .item img.logo {
-    margin-right: 1em;
+body {
+    padding-top: 4em;
 }
 
+
 .task-done {
-    color: rgba(0,0,0,0.2);
+    color: rgba(0,0,0,0.2) !important;
     text-decoration: line-through;
+}
+
+#icon-add-task {
+    width: 6em;
+    height: 6em;
+}
+
+
+.icon-huge {
+    font-size: 6em;
+}
+
+.task-checkbox {
+    transform:scale(2.5, 2.5);
+    margin: 1.75em;
 }
