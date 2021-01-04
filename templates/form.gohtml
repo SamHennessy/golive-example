@@ -12,7 +12,7 @@
 
                     <label for="add">Task</label>
                     <div class="control has-icons-right">
-                        <input class="input is-large {{- if .InputInvalid }} is-danger{{ else if .CanAdd }} is-success{{ end }}" go-live-input="InputText" type="text" name="add" value="{{ .InputText }}" placeholder="Task" autofocus>
+                        <input class="input is-large {{- if .InputInvalid }} is-danger{{ else if .CanAdd }} is-success{{ end }}" go-live-input="InputText" go-live-keydown="HandleTest" go-live-key="Enter" type="text" name="add" value="{{ .InputText }}" placeholder="Task" autofocus>
                         <span id="task-add-icon" class="icon is-large is-right">
                             <i id="task-add-icon-i" class="mdi {{ if .CanAdd }} has-text-success mdi-check {{ else if .InputInvalid }} has-text-danger mdi-alert-circle {{ else }} mdi-asterisk{{ end }}"></i>
                         </span>
@@ -43,16 +43,21 @@
                 </div>
             </div>
 
-
             <div class="columns">
                 <div class="column">
                   {{ .TabCount }} Tasks
 
                     <div class="tabs is-centered">
                         <ul>
-                            <li class="{{ if eq .Tab "all" }}is-active{{ end }}"><a go-live-click="ShowTabAll">All</a></li>
-                            <li class="{{ if eq .Tab "todo" }}is-active{{ end }}"><a go-live-click="ShowTabTodo">ToDo</a></li>
-                            <li class="{{ if eq .Tab "done" }}is-active{{ end }}"><a go-live-click="ShowTabDone">Done</a></li>
+                            <li class="{{ if eq .Tab "all" }}is-active{{ end }}">
+                                <a go-live-click="ShowTab" go-live-data-tab="all">All</a>
+                            </li>
+                            <li class="{{ if eq .Tab "todo" }}is-active{{ end }}">
+                                <a go-live-click="ShowTab" go-live-data-tab="todo">ToDo</a>
+                            </li>
+                            <li class="{{ if eq .Tab "done" }}is-active{{ end }}">
+                                <a go-live-click="ShowTab" go-live-data-tab="done">Done</a>
+                            </li>
                         </ul>
                     </div>
 

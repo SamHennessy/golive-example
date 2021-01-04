@@ -90,16 +90,17 @@ func (c *Form) HandleHideModal() {
 	c.ShowModal = false
 }
 
-func (c *Form) ShowTabAll() {
-	c.Tab = "all"
-}
+func (c *Form) ShowTab(data map[string]string) {
+	tab := "all"
 
-func (c *Form) ShowTabTodo() {
-	c.Tab = "todo"
-}
+	switch data["tab"] {
+	case "todo":
+		tab = "todo"
+	case "done":
+		tab = "done"
+	}
 
-func (c *Form) ShowTabDone() {
-	c.Tab = "done"
+	c.Tab = tab
 }
 
 func (c *Form) TabCount() int {

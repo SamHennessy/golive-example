@@ -1,5 +1,5 @@
-github.com/SamHennessy/golive v0.0.0-20201230172102-b915f7607b24 h1:adUUms/90Cuabk9R9iSJMz7WwOdHhOwUe6VMX9kTtH8=
-github.com/SamHennessy/golive v0.0.0-20201230172102-b915f7607b24/go.mod h1:RIJU60NUiToSfhIOejRbntqEeZ5pw6hFWsdB1xwEWSM=
+github.com/SamHennessy/golive v0.0.0-20210104130313-639c3936eebd h1:lVVaNQNtfmkpw+NS4ZO9sTbKjy7q9myeDs858NF2ORQ=
+github.com/SamHennessy/golive v0.0.0-20210104130313-639c3936eebd/go.mod h1:RIJU60NUiToSfhIOejRbntqEeZ5pw6hFWsdB1xwEWSM=
 github.com/andybalholm/brotli v1.0.0 h1:7UCwP93aiSfvWpapti8g88vVVGp2qqtGyePsSuDafo4=
 github.com/andybalholm/brotli v1.0.0/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
 github.com/fasthttp/websocket v1.4.3 h1:qjhRJ/rTy4KB8oBxljEC00SDt6HUY9jLRfM601SUdS4=

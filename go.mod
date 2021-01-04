@@ -8,5 +8,6 @@ require (
 	github.com/gofiber/websocket/v2 v2.0.2
 )
 
-replace github.com/brendonferreira/golive => github.com/SamHennessy/golive v0.0.0-20201230172102-b915f7607b24
+replace github.com/brendonferreira/golive => github.com/SamHennessy/golive v0.0.0-20210104130313-639c3936eebd
+
 //replace github.com/brendonferreira/golive => ../golive

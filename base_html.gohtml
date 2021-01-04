@@ -1,274 +1,327 @@
 <!DOCTYPE html>
 <html lang="{{ .Lang }}">
 <head>
-  <meta charset="UTF-8">
-  <title>XX {{ .Title }}</title>
-{{ .Head }}
-  <script type="application/javascript">
+    <meta charset="UTF-8">
+    <title>XX {{ .Title }}</title>
+    {{ .Head }}
+    <script type="application/javascript">
+        const goLive = {
+            server: new WebSocket(['ws://', window.location.host, "/ws"].join("")),
 
-      const findLiveInputsFromElement = (el) => {
-          return el.querySelectorAll('*[go-live-input]')
-      }
+            handlers: [],
+            onceHandlers: {},
 
-      const findLiveClicksFromElement = (el) => {
-          return el.querySelectorAll('*[go-live-click]')
-      }
+            getLiveComponent(id) {
+                return document.querySelector(['*[go-live-component-id=', id, ']'].join(''));
+            },
 
-      const goLive = {
-          server: new WebSocket(['ws://', window.location.host, "/ws"].join("")),
+            on(name, handler) {
+                const newSize = this.handlers.push({
+                    name,
+                    handler
+                });
+                return newSize - 1;
+            },
 
-          handlers: [],
-          onceHandlers: {},
+            emitOnce(name) {
+                const handler = this.onceHandlers[name]
+                if( !handler ) {
+                    this.createOnceHandler(name, true);
+                    return;
+                }
+                for( const cb of handler.cbs ){
+                    cb();
+                }
+            },
 
-          getLiveComponent(id) {
-              return document.querySelector(['*[go-live-component-id=', id, ']'].join(''));
-          },
-          getLiveInputs(id) {
-              return findLiveInputsFromElement(this.getLiveContent(id));
-          },
-          getLiveClick(id) {
-              return findLiveClicksFromElement(this.getLiveContent(id));
-          },
-          on(name, handler) {
-              const newSize = this.handlers.push({
-                  name,
-                  handler
-              });
-              return newSize - 1;
-          },
+            createOnceHandler(name, called) {
+                this.onceHandlers[name] = {
+                    called,
+                    cbs: []
+                };
 
-          emitOnce(name) {
-              const handler = this.onceHandlers[name]
-              if( !handler ) {
-                  this.createOnceHandler(name, true);
-                  return;
-              }
-              for( const cb of handler.cbs ){
-                  cb();
-              }
-          },
+                return this.onceHandlers[name];
+            },
 
-          createOnceHandler(name, called) {
-              this.onceHandlers[name] = {
-                  called,
-                  cbs: []
-              }
+            once(name, cb) {
+                let handler = this.onceHandlers[name];
 
-              return this.onceHandlers[name]
-          },
+                if( !handler ) {
+                    handler = this.createOnceHandler(name, false);
+                }
 
-          once(name, cb) {
-              let handler = this.onceHandlers[name]
+                handler.cbs.push(cb);
+            },
 
-              if( !handler ) {
-                  handler = this.createOnceHandler(name, false)
-              }
+            findHandler(name) {
+                return this.handlers.filter( i => i.name === name );
+            },
 
-              handler.cbs.push(cb)
-          },
+            emit(name, message) {
+                for (const handler of this.findHandler(name)) {
+                    handler.handler(message);
+                }
+            },
 
-          findHandler(name) {
-              return this.handlers.filter( i => i.name === name )
-          },
+            off(index) {
+                this.handlers.splice(index, 1);
+            },
 
-          emit(name, message) {
-              for (const handler of this.findHandler(name)) {
-                  handler.handler(message)
-              }
-          },
+            connectElement(scopeId, viewElement) {
 
-          off(index) {
-              this.handlers.splice(index, 1)
-          },
+                const clickElements = findLiveClicksFromElement(viewElement);
+                clickElements.forEach(function(element) {
+                    if (!element) {
+                        return;
+                    }
 
-          connectElement(scopeId, viewElement) {
+                    element.addEventListener('click', function(_) {
+                        goLive.server.send(JSON.stringify({
+                            name: "{{ .Enum.EventLiveMethod }}",
+                            component_id: scopeId,
+                            method_name: element.getAttribute("go-live-click"),
+                            method_data: dataFromElementAttributes(element),
+                        }));
+                    });
+                });
 
-              const liveInputs = findLiveInputsFromElement(viewElement)
-              const clickElements = findLiveClicksFromElement(viewElement)
+                const keydownElements = findLiveKeyDownFromElement(viewElement);
+                keydownElements.forEach(function(element) {
+                    if (!element) {
+                        return;
+                    }
 
-              clickElements.forEach(function(element) {
-                  if (!element) {
-                      return
-                  }
+                    const method = element.getAttribute("go-live-keydown");
 
-                  element.addEventListener('click', function(_) {
-                      goLive.server.send(JSON.stringify({
-                          name: "{{ .Enum.EventLiveMethod }}",
-                          component_id: scopeId,
-                          method_name: element.getAttribute("go-live-click"),
-                          value: String(element.value)
-                      }))
-                  })
-              })
+                    const attrs = element.attributes;
+                    let filterKeys = [];
+                    for(let i = 0; i < attrs.length; i++) {
+                        if (attrs[i].name === "go-live-key" || attrs[i].name.startsWith("go-live-key-")) {
+                            filterKeys.push(attrs[i].value);
+                        }
+                    }
 
-              liveInputs.forEach(function(element) {
+                    element.addEventListener('keydown', function(event) {
+                        const code = String(event.code);
+                        let hit = true;
 
-                  if (!element) {
-                      return
-                  }
+                        if (filterKeys.length !== 0) {
+                            hit = false;
+                            for (let i = 0; i < filterKeys.length; i++) {
+                                if (filterKeys[i] === code) {
+                                    hit = true;
 
-                  const type = element.getAttribute("type")
+                                    break;
+                                }
+                            }
+                        }
 
-                  element.addEventListener('input', function(_) {
+                        if (hit) {
+                            goLive.server.send(JSON.stringify({
+                                name: "{{ .Enum.EventLiveMethod }}",
+                                component_id: scopeId,
+                                method_name: method,
+                                method_data: dataFromElementAttributes(element),
+                                dom_event: {
+                                    keyCode: code,
+                                },
+                            }));
+                        }
+                    });
+                });
 
-                      let value = element.value
+                const liveInputs = findLiveInputsFromElement(viewElement);
+                liveInputs.forEach(function(element) {
 
-                      if (type === "checkbox") {
-                          value = element.checked
-                      }
+                    if (!element) {
+                        return;
+                    }
 
-                      goLive.server.send(JSON.stringify({
-                          name: "{{ .Enum.EventLiveInput }}",
-                          component_id: scopeId,
-                          key: element.getAttribute("go-live-input"),
-                          value: String(value)
-                      }))
-                  })
-              })
+                    const type = element.getAttribute("type");
 
-              goLive.on('{{ .Enum.EventLiveDom }}', (message) => {
+                    element.addEventListener('input', function(_) {
 
-                  const handleChange = {
-                      '{{ .Enum.DiffSetAttr }}': (message) => {
+                        let value = element.value;
 
-                          const {
-                              attr,
-                              element
-                          } = message
+                        if (type === "checkbox") {
+                            value = element.checked;
+                        }
 
-                          const el = viewElement.querySelector(element)
+                        goLive.server.send(JSON.stringify({
+                            name: "{{ .Enum.EventLiveInput }}",
+                            component_id: scopeId,
+                            key: element.getAttribute("go-live-input"),
+                            value: String(value)
+                        }));
+                    });
+                });
 
-                          if( !el ) {
-                              console.error("Element not found", element)
-                              return
-                          }
+                goLive.on('{{ .Enum.EventLiveDom }}', (message) => {
 
-                          if (attr.Name === "value" && el.value) {
-                              el.value = attr.Value
-                          }
+                    const handleChange = {
+                        '{{ .Enum.DiffSetAttr }}': (message) => {
 
-                          else {
-                              el.setAttribute(attr.Name, attr.Value)
-                          }
+                            const {
+                                attr,
+                                element
+                            } = message;
 
-                      },
-                      '{{ .Enum.DiffRemoveAttr }}': (message) => {
-                          const {
-                              attr,
-                              element
-                          } = message
+                            const el = viewElement.querySelector(element);
 
-                          const el = viewElement.querySelector(element)
+                            if( !el ) {
+                                console.error("Element not found", element);
+                                return;
+                            }
 
-                          if( !el ) {
-                              console.error("Element not found", element)
-                              return
-                          }
+                            if (attr.Name === "value" && el.value) {
+                                el.value = attr.Value;
+                            }
 
-                          el.removeAttribute(attr.Name)
+                            else {
+                                el.setAttribute(attr.Name, attr.Value);
+                            }
 
-                      },
-                      '{{ .Enum.DiffReplace }}': (message) => {
-                          const {
-                              content,
-                              element
-                          } = message
+                        },
+                        '{{ .Enum.DiffRemoveAttr }}': (message) => {
+                            const {
+                                attr,
+                                element
+                            } = message;
 
-                          const el = viewElement.querySelector(element)
+                            const el = viewElement.querySelector(element);
 
-                          if (!el) {
-                              console.warn("Element not found with selector", element)
-                              return
-                          }
+                            if( !el ) {
+                                console.error("Element not found", element);
+                                return;
+                            }
 
-                          const wrapper = document.createElement('div');
-                          wrapper.innerHTML = content;
+                            el.removeAttribute(attr.Name);
 
-                          el.parentElement.replaceChild(wrapper.firstChild, el)
-                      },
-                      '{{ .Enum.DiffRemove }}': (message) => {
-                          const {
-                              element
-                          } = message
+                        },
+                        '{{ .Enum.DiffReplace }}': (message) => {
+                            const {
+                                content,
+                                element
+                            } = message;
 
-                          const el = viewElement.querySelector(element)
+                            const el = viewElement.querySelector(element);
 
-                          if (!el) {
-                              console.warn("Element not found with selector", element)
-                              return
-                          }
+                            if (!el) {
+                                console.warn("Element not found with selector", element)
+                                return
+                            }
 
-                          el.parentElement.removeChild(el)
-                      },
-                      '{{ .Enum.DiffSetInnerHtml }}': (message) => {
-                          const {
-                              content,
-                              element
-                          } = message
+                            const wrapper = document.createElement('div');
+                            wrapper.innerHTML = content;
 
-                          const el = viewElement.querySelector(element)
+                            el.parentElement.replaceChild(wrapper.firstChild, el)
+                        },
+                        '{{ .Enum.DiffRemove }}': (message) => {
+                            const {
+                                element
+                            } = message
 
-                          if (!el) {
-                              console.warn("Element not found with selector", element)
-                              return
-                          }
+                            const el = viewElement.querySelector(element)
 
-                          if (content.trim().length === 0) {
-                              return
-                          }
+                            if (!el) {
+                                console.warn("Element not found with selector", element)
+                                return
+                            }
 
-                          el.innerHTML = content
+                            el.parentElement.removeChild(el)
+                        },
+                        '{{ .Enum.DiffSetInnerHtml }}': (message) => {
+                            const {
+                                content,
+                                element
+                            } = message;
 
-                          // Add listeners to new elements
-                          goLive.connectElement(scopeId, el)
+                            const el = viewElement.querySelector(element);
 
-                      },
-                      '{{ .Enum.DiffAppend }}': (message) => {
-                          const {
-                              content,
-                              element
-                          } = message;
+                            if (!el) {
+                                console.warn("Element not found with selector", element);
+                                return;
+                            }
 
-                          const el = viewElement.querySelector(element);
+                            if (content.trim().length === 0) {
+                                return;
+                            }
 
-                          if (!el) {
-                              console.warn("Element not found with selector", element)
-                              return
-                          }
+                            el.innerHTML = content;
 
-                          const wrapper = document.createElement('div');
-                          wrapper.innerHTML = content;
+                            // Add listeners to new elements
+                            goLive.connectElement(scopeId, el);
 
-                          if (content.trim().length > 0) {
-                              el.appendChild(wrapper.firstChild);
-                          }
+                        },
+                        '{{ .Enum.DiffAppend }}': (message) => {
+                            const {
+                                content,
+                                element
+                            } = message;
 
-                          goLive.connectElement(scopeId, el.lastChild);
-                      }
-                  }
+                            const el = viewElement.querySelector(element);
 
-                  if (viewElement.getAttribute("go-live-component-id") === message.component_id) {
-                      handleChange[message.type.toLowerCase()](message);
-                  }
-              })
-          },
+                            if (!el) {
+                                console.warn("Element not found with selector", element);
+                                return;
+                            }
 
-          connect(id) {
-              goLive.connectElement(id, goLive.getLiveComponent(id));
-          },
-      }
+                            const wrapper = document.createElement('div');
+                            wrapper.innerHTML = content;
 
-      goLive.server.onmessage = (rawMessage) => {
-          const message = JSON.parse(rawMessage.data);
+                            if (content.trim().length > 0) {
+                                el.appendChild(wrapper.firstChild);
+                            }
 
-          goLive.emit(message.name, message);
-      }
+                            goLive.connectElement(scopeId, el.lastChild);
+                        }
+                    }
 
-      goLive.server.onopen = () => {
-          goLive.emitOnce('WS_CONNECTION_OPEN');
-      }
+                    if (viewElement.getAttribute("go-live-component-id") === message.component_id) {
+                        handleChange[message.type.toLowerCase()](message);
+                    }
+                })
+            },
 
-  </script>
+            connect(id) {
+                goLive.connectElement(id, goLive.getLiveComponent(id));
+            }
+        }
+
+        goLive.server.onmessage = (rawMessage) => {
+            const message = JSON.parse(rawMessage.data);
+
+            goLive.emit(message.name, message);
+        }
+
+        goLive.server.onopen = () => {
+            goLive.emitOnce('WS_CONNECTION_OPEN');
+        }
+
+        const findLiveInputsFromElement = (el) => {
+            return el.querySelectorAll('*[go-live-input]');
+        }
+
+        const findLiveClicksFromElement = (el) => {
+            return el.querySelectorAll('*[go-live-click]');
+        }
+
+        const findLiveKeyDownFromElement = (el) => {
+            return el.querySelectorAll('*[go-live-keydown]');
+        }
+
+        const dataFromElementAttributes = (el) => {
+            const attrs = el.attributes;
+            let data = {};
+            for(let i = 0; i < attrs.length; i++) {
+                if (attrs[i].name.startsWith("go-live-data-")) {
+                    data[attrs[i].name.substring(13)] = attrs[i].value
+                }
+            }
+
+            return data
+        }
+    </script>
 </head>
 <body>
 {{ .Body }}
