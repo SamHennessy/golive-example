@@ -157,6 +157,9 @@
                 });
 
                 goLive.on('{{ .Enum.EventLiveDom }}', (message) => {
+                    if (viewElement.getAttribute("go-live-component-id") !== message.component_id) {
+                        return;
+                    }
 
                     const handleChange = {
                         '{{ .Enum.DiffSetAttr }}': (message) => {

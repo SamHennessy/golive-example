@@ -12,7 +12,7 @@
 
                     <label for="add">Task</label>
                     <div class="control has-icons-right">
-                        <input class="input is-large {{- if .InputInvalid }} is-danger{{ else if .CanAdd }} is-success{{ end }}" go-live-input="InputText" go-live-keydown="HandleTest" go-live-key="Enter" type="text" name="add" value="{{ .InputText }}" placeholder="Task" autofocus>
+                        <input id="task-input-new" class="input is-large {{- if .InputInvalid }} is-danger{{ else if .CanAdd }} is-success{{ end }}" go-live-input="InputText" go-live-keydown="HandleAdd" go-live-key="Enter" type="text" name="add" value="{{ .InputText }}" placeholder="Task" autofocus>
                         <span id="task-add-icon" class="icon is-large is-right">
                             <i id="task-add-icon-i" class="mdi {{ if .CanAdd }} has-text-success mdi-check {{ else if .InputInvalid }} has-text-danger mdi-alert-circle {{ else }} mdi-asterisk{{ end }}"></i>
                         </span>
@@ -21,7 +21,7 @@
                     <div id="validation-message" class="has-text-danger {{- if .InputInvalid }} animate__animated animate__fadeIn{{ else }} animate__animated animate__fadeOut{{ end }}">{{ .InputInvalid }}</div>
                 </section>
                 <footer class="modal-card-foot">
-                    <button class="button is-primary" {{ if not .CanAdd }}disabled{{ end }} go-live-click="HandleAdd">Add</button>
+                    <button id="task-add-button-new" class="button is-primary" {{ if not .CanAdd }}disabled{{ end }} go-live-click="HandleAdd">Add</button>
                     <button class="button" go-live-click="HandleHideModal">Cancel</button>
                 </footer>
             </div>
@@ -68,12 +68,10 @@
                 <div class="column">
                     <div class="todo-tasks">
                         {{ range $index, $task := .Tasks }}
-                            {{ if $.ShowTask $task }}
-                            <div>
-                                <input type="checkbox" tabindex="0" go-live-input="Tasks.{{$index}}.Done" class="task-checkbox" {{- if $task.Done }} checked{{ end }}>
-                                <label class="is-size-4 {{ if $task.Done }}task-done{{ end }}">{{ $task.Text }}</label>
-                            </div>
-                            {{ end }}
+                        <div id="task_{{ $index }}_box" class="{{ if not ($.ShowTask $task) }}is-hidden{{ end }}">
+                            <input id="task_{{ $index }}_done" type="checkbox" tabindex="0" go-live-input="Tasks.{{$index}}.Done" class="task-checkbox" {{- if $task.Done }} checked{{ end }}>
+                            <label id="task_{{ $index }}_text" class="is-size-4 {{ if $task.Done }}task-done{{ end }}">{{ $task.Text }}</label>
+                        </div>
                         {{ end }}
                     </div>
                 </div>
