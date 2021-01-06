@@ -19,7 +19,7 @@ func main() {
 	liveServer := golive.NewServer()
 
 	logger := golive.NewLoggerBasic()
-	logger.Level = golive.LogDebug
+	logger.Level = golive.LogInfo
 	liveServer.Log = logger.Log
 
 	var livePage golive.PageContent
@@ -51,7 +51,7 @@ func main() {
 	app.Get("/", liveServer.CreateHTMLHandlerWithMiddleware(components.NewHome(ds), livePage, middleware.Session))
 	app.Get("/ws", websocket.New(liveServer.HandleWSRequest))
 
-	if err := app.Listen(":3000"); err != nil {
+	if err := app.Listen(":" + os.Getenv("PORT")); err != nil {
 		fmt.Println("ERROR: ", err)
 
 		os.Exit(1)

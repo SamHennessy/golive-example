@@ -12,6 +12,8 @@ type Clock struct {
 	golive.LiveComponentWrapper
 	ActualTime time.Time
 	mountOnce  sync.Once
+	ticker     *time.Ticker
+	done       chan bool
 }
 
 func NewClock(_ context.Context) *golive.LiveComponent {
@@ -22,18 +24,28 @@ func NewClock(_ context.Context) *golive.LiveComponent {
 
 func (c *Clock) Mounted(_ *golive.LiveComponent) {
 	c.mountOnce.Do(func() {
+		c.ticker = time.NewTicker(time.Second)
+		c.done = make(chan bool)
+
 		go func() {
 			for {
-				time.Sleep(time.Second)
-				c.ActualTime = time.Now()
-				c.Commit()
+				select {
+				case <-c.done:
+					return
+				case t := <-c.ticker.C:
+					c.ActualTime = t
+					go c.Commit()
+				}
 			}
 		}()
 	})
 }
 
-func (c *Clock) TemplateHandler(_ *golive.LiveComponent) string {
+func (c *Clock) BeforeUnmount(lc *golive.LiveComponent) {
+	c.done <- true
+}
 
+func (c *Clock) TemplateHandler(_ *golive.LiveComponent) string {
 	return `
 <div class="columns">
     <div class="column is-1">

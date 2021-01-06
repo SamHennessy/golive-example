@@ -1,16 +1,15 @@
 # Development helpers
 
-# Allow alternative test runner e.g.: `export GOTEST=gotest`
-GOTEST ?= go test
 # Allow alternative formatter e.g.: `export GOFMT=gofumports`
 GOFMT ?= gofmt
+PORT ?= 3000
 
 .PHONY: build
 build:
 	go build -o ./bin/web ./cmd/web
 
 run:
-	./bin/web
+	PORT=$(PORT) ./bin/web
 
 # Run static code analysis
 .PHONY: lint
@@ -27,3 +26,25 @@ format:
 .PHONY: mod-update
 mod-update:
 	go get -u ./...
+
+# Package the app as a docker container
+.PHONY: pkg
+pkg:
+	@docker build --tag golive-example:local .
+
+# Run the packaged dockerized app
+.PHONY: pkgrun
+pkgrun:
+	docker run --rm -p $(PORT):$(PORT) --env PORT=$(PORT) golive-example:local
+
+.PHONY: push
+push:
+	heroku container:push web -a golive-example
+
+.PHONY: deploy
+deploy:
+	heroku container:release web -a golive-example
+
+.PHONY: hlog
+hlog:
+	heroku logs --tail -a golive-example
