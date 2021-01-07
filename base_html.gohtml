@@ -2,7 +2,7 @@
 <html lang="{{ .Lang }}">
 <head>
     <meta charset="UTF-8">
-    <title>XX {{ .Title }}</title>
+    <title>EX_Local {{ .Title }}</title>
     {{ .Head }}
     <script type="application/javascript">
         let ws = "ws";
@@ -287,6 +287,14 @@
 
                     if (viewElement.getAttribute("go-live-component-id") === message.component_id) {
                         handleChange[message.type.toLowerCase()](message);
+                    }
+                })
+
+                goLive.on('{{ .Enum.EventLiveError }}', (message) => {
+                    console.error(message.type);
+
+                    if (message.type === '{{ index .EnumLiveError "LiveErrorSessionNotFound"}}') {
+                        window.location.reload(false);
                     }
                 })
             },

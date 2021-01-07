@@ -47,15 +47,8 @@ func (c *Form) TemplateHandler(_ *golive.LiveComponent) string {
 	return string(fileBytes)
 }
 
-// BeforeMount the component loading html
-func (c *Form) BeforeMount(_ *golive.LiveComponent) {
-	// fmt.Println("BeforeMount", c.InputText)
-
-}
-
 // Mounted after component is mounted
 func (c *Form) Mounted(_ *golive.LiveComponent) {
-	// fmt.Println("Mounted")
 	c.ds.SetToDoList(c.sessionID, c.Tasks)
 }
 
