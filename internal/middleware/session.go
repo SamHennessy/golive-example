@@ -32,6 +32,5 @@ func Session(next golive.HTTPHandlerCtx) golive.HTTPHandlerCtx {
 
 func GetSessionID(ctx context.Context) string {
 	val, _ := ctx.Value(sessionID).(string)
-
 	return val
 }

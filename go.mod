@@ -14,6 +14,6 @@ require (
 	golang.org/x/sys v0.0.0-20210105210732-16f7687f5001 // indirect
 )
 
-replace github.com/brendonferreira/golive => github.com/SamHennessy/golive v0.0.0-20210107112545-cc34e325b33d
+//replace github.com/brendonferreira/golive => github.com/SamHennessy/golive v0.0.0-20210107112545-cc34e325b33d
 
-//replace github.com/brendonferreira/golive => ../golive
+replace github.com/brendonferreira/golive => ../golive

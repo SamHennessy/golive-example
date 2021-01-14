@@ -44,6 +44,13 @@ To see how to work with the code in the project, build, run, etc. Link in the [M
 - Add a structured logger like ZeroLog?
 - Global stats? E.g. active sessions, messages in and out, memory usage, etc.
 - Use Pub Sub to show server pushed updates
+- Get users local for clock
+- Start and stop clock (play pause button?)
+- Mark all done
+- Delete
+- Delete all
+- Change task
+- Make layout work on mobile
 
 ### More Apps
 
@@ -53,3 +60,4 @@ Possible other apps to build:
 - Twitter clone
 - WYSIWYG editor
 - Server "real-time" metrics
+- Math games

@@ -27,6 +27,11 @@ format:
 mod-update:
 	go get -u ./...
 
+# Vendor the dependencies, useful for testing local version of a package (e.g. GoLive) in Docker
+.PHONY: vendor
+vendor:
+	go mod vendor
+
 # Package the app as a docker container
 .PHONY: pkg
 pkg:
@@ -39,7 +44,9 @@ pkgrun:
 
 .PHONY: push
 push:
+	go mod vendor
 	heroku container:push web -a golive-example
+	rm -fr vendor
 
 .PHONY: deploy
 deploy:

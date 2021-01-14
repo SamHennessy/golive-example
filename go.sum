@@ -1,9 +1,9 @@
-github.com/SamHennessy/golive v0.0.0-20210107112545-cc34e325b33d h1:RSb8emZObfrrEfrgRv7fW/savXdHFyDZsDospTLA8yg=
-github.com/SamHennessy/golive v0.0.0-20210107112545-cc34e325b33d/go.mod h1:RIJU60NUiToSfhIOejRbntqEeZ5pw6hFWsdB1xwEWSM=
 github.com/andybalholm/brotli v1.0.0 h1:7UCwP93aiSfvWpapti8g88vVVGp2qqtGyePsSuDafo4=
 github.com/andybalholm/brotli v1.0.0/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
 github.com/andybalholm/brotli v1.0.1 h1:KqhlKozYbRtJvsPrrEeXcO+N2l6NYT5A2QAFmSULpEc=
 github.com/andybalholm/brotli v1.0.1/go.mod h1:loMXtMfwqflxFJPmdbJO0a3KNoPuLBgiu3qAvBg8x/Y=
+github.com/brendonferreira/golive v0.0.0-20210106184349-68417b98b395 h1:PcqTDH8ephWnEB1up4YnDmDfChgEtpNqEaZFNhRQ0yk=
+github.com/brendonferreira/golive v0.0.0-20210106184349-68417b98b395/go.mod h1:RIJU60NUiToSfhIOejRbntqEeZ5pw6hFWsdB1xwEWSM=
 github.com/fasthttp/websocket v1.4.3 h1:qjhRJ/rTy4KB8oBxljEC00SDt6HUY9jLRfM601SUdS4=
 github.com/fasthttp/websocket v1.4.3/go.mod h1:5r4oKssgS7W6Zn6mPWap3NWzNPJNzUUh3baWTOhcYQk=
 github.com/gofiber/fiber/v2 v2.1.0/go.mod h1:aG+lMkwy3LyVit4CnmYUbUdgjpc3UYOltvlJZ78rgQ0=

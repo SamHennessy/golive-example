@@ -14,6 +14,7 @@ type Clock struct {
 	mountOnce  sync.Once
 	ticker     *time.Ticker
 	done       chan bool
+	Pause      bool
 }
 
 func NewClock(_ context.Context) *golive.LiveComponent {
@@ -33,8 +34,10 @@ func (c *Clock) Mounted(_ *golive.LiveComponent) {
 				case <-c.done:
 					return
 				case t := <-c.ticker.C:
-					c.ActualTime = t
-					go c.Commit()
+					if !c.Pause {
+						c.ActualTime = t
+						go c.Commit()
+					}
 				}
 			}
 		}()
@@ -58,6 +61,7 @@ func (c *Clock) TemplateHandler(_ *golive.LiveComponent) string {
     <div class="column has-text-right">
 		<span class="is-size-5 is-uppercase has-text-weight-semibold">{{ .DayOfWeek }}</span><br>
 		<span class="is-family-code has-text-weight-light">{{ .Time }}</span>
+		<a go-live-click="PlayPause"><i class="mdi mdi-{{ if .Pause }}play{{ else }}pause{{ end }}"></i></a>
 	</div>
 </div>
 	`
@@ -81,4 +85,8 @@ func (c *Clock) Year() string {
 
 func (c *Clock) Time() string {
 	return c.ActualTime.Format("15:04:05 MST")
+}
+
+func (c *Clock) PlayPause() {
+	c.Pause = !c.Pause
 }

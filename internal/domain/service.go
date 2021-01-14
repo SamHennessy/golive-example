@@ -1,6 +1,8 @@
 package domain
 
-import "sync"
+import (
+	"sync"
+)
 
 type Service struct {
 	todoLists     map[string][]ToDoTask

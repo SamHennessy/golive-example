@@ -47,11 +47,6 @@ func (c *Form) TemplateHandler(_ *golive.LiveComponent) string {
 	return string(fileBytes)
 }
 
-// Mounted after component is mounted
-func (c *Form) Mounted(_ *golive.LiveComponent) {
-	c.ds.SetToDoList(c.sessionID, c.Tasks)
-}
-
 func (c *Form) InputInvalid() string {
 	if c.InputText != "" && len(c.InputText) < 3 {
 		return "Please make it longer"
@@ -70,6 +65,8 @@ func (c *Form) HandleAdd() {
 			Done: false,
 			Text: c.InputText,
 		})
+		c.ds.SetToDoList(c.sessionID, c.Tasks)
+
 		c.InputText = ""
 		c.ShowModal = false
 	}

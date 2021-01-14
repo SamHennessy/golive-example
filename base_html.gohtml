@@ -181,7 +181,7 @@
                                 return;
                             }
 
-                            if (attr.Name === "value" && el.value) {
+                            if (attr.Name === "value" && el.value && el !== document.activeElement) {
                                 el.value = attr.Value;
                             }
 

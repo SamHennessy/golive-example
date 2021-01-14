@@ -32,8 +32,5 @@ COPY --from=builder /home/appuser/public /public
 # Use an unprivileged user.
 USER appuser
 
-# Heroku port assignment
-CMD gunicorn --bind 0.0.0.0:$PORT wsgi
-
 # Run app.
 ENTRYPOINT ["/web"]
