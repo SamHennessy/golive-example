@@ -7,7 +7,7 @@ import (
 
 	"github.com/SamHennessy/golive-example/internal/domain"
 	"github.com/SamHennessy/golive-example/internal/middleware"
-	"github.com/brendonferreira/golive"
+	"github.com/brendonmatos/golive"
 )
 
 type Form struct {

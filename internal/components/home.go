@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 
 	"github.com/SamHennessy/golive-example/internal/domain"
-	"github.com/brendonferreira/golive"
+	"github.com/brendonmatos/golive"
 )
 
 type Home struct {

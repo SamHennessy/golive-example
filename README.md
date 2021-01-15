@@ -8,9 +8,12 @@ Often the features are needlessly complicated (for example, the real-time clock)
 
 GoLive is a new project with lots of opportunities to contribute code. As such,  I'm also using this project to help push the development of GoLive by giving me inspiration for new features.
 
+### [Live Demo](https://golive-example.herokuapp.com/)
+*Hosted on Heroku hobby account as a Docker container. Initial load may be slow due to Heroku putting the container to sleep.*
+
 ## Technology
 
-- [GoLive](https://github.com/brendonferreira/golive)
+- [GoLive](https://github.com/brendonmatos/golive)
     - Reactive HTML Server Side Rendered by GoLang over WebSockets
     - Acts as the view layer
 - [Bulma](https://bulma.io/)
@@ -45,12 +48,10 @@ To see how to work with the code in the project, build, run, etc. Link in the [M
 - Global stats? E.g. active sessions, messages in and out, memory usage, etc.
 - Use Pub Sub to show server pushed updates
 - Get users local for clock
-- Start and stop clock (play pause button?)
 - Mark all done
 - Delete
 - Delete all
 - Change task
-- Make layout work on mobile
 
 ### More Apps
 

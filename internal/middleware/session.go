@@ -3,7 +3,7 @@ package middleware
 import (
 	"context"
 
-	"github.com/brendonferreira/golive"
+	"github.com/brendonmatos/golive"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 )

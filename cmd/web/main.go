@@ -9,7 +9,7 @@ import (
 	"github.com/SamHennessy/golive-example/internal/components"
 	"github.com/SamHennessy/golive-example/internal/domain"
 	"github.com/SamHennessy/golive-example/internal/middleware"
-	"github.com/brendonferreira/golive"
+	"github.com/brendonmatos/golive"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 )

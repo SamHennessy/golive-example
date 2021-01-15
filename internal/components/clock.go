@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/brendonferreira/golive"
+	"github.com/brendonmatos/golive"
 )
 
 type Clock struct {
@@ -50,8 +50,8 @@ func (c *Clock) BeforeUnmount(lc *golive.LiveComponent) {
 
 func (c *Clock) TemplateHandler(_ *golive.LiveComponent) string {
 	return `
-<div class="columns">
-    <div class="column is-1">
+<div class="columns is-mobile">
+    <div class="column is-1-desktop is-2-mobile has-text-right">
 		<span class="is-size-3 is-uppercase has-text-weight-bold">{{ .DayOfMonth }}</span>
 	</div>
     <div class="column">
@@ -64,7 +64,7 @@ func (c *Clock) TemplateHandler(_ *golive.LiveComponent) string {
 		<a go-live-click="PlayPause"><i class="mdi mdi-{{ if .Pause }}play{{ else }}pause{{ end }}"></i></a>
 	</div>
 </div>
-	`
+`
 }
 
 func (c *Clock) DayOfMonth() string {

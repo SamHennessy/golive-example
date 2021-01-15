@@ -1,5 +1,8 @@
-body {
-    padding-top: 4em;
+@media (min-width: 1024px) {
+    body {
+        padding-top: 4em;
+    }
+
 }
 
 
