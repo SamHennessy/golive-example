@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"strconv"
 
 	"github.com/SamHennessy/golive-example/internal/domain"
 	"github.com/SamHennessy/golive-example/internal/middleware"
@@ -70,6 +71,39 @@ func (c *Form) HandleAdd() {
 		c.InputText = ""
 		c.ShowModal = false
 	}
+}
+
+func (c *Form) HandleDeleteAll() {
+	c.Tasks = nil
+
+	c.ds.SetToDoList(c.sessionID, c.Tasks)
+}
+
+func (c *Form) HandleDeleteTask(data map[string]string) {
+	if data["index"] == "" {
+		return
+	}
+
+	i, err := strconv.Atoi(data["index"])
+	if err != nil {
+		return
+	}
+
+	if i < 0 || i > (len(c.Tasks)-1) {
+		return
+	}
+
+	c.Tasks = append(c.Tasks[:i], c.Tasks[i+1:]...)
+
+	c.ds.SetToDoList(c.sessionID, c.Tasks)
+}
+
+func (c *Form) HandleMarkAllDone() {
+	for i := 0; i < len(c.Tasks); i++ {
+		c.Tasks[i].Done = true
+	}
+
+	c.ds.SetToDoList(c.sessionID, c.Tasks)
 }
 
 func (c *Form) HandleShowModal() {

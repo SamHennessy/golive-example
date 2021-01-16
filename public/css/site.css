@@ -5,13 +5,12 @@
 
 }
 
-
 .task-done {
     color: rgba(0,0,0,0.2) !important;
     text-decoration: line-through;
 }
 
-#icon-add-task {
+.action-icon {
     width: 6em;
     height: 6em;
 }
@@ -21,7 +20,30 @@
     font-size: 6em;
 }
 
+.icon-big {
+    font-size: 4em;
+}
+
 .task-checkbox {
     transform:scale(2.5, 2.5);
     margin: 1.75em;
+}
+
+.grow {
+    transition: all .2s ease-in-out;
+}
+
+.grow:hover {
+    transform: scale(1.1);
+}
+
+.todo-tasks > .level {
+    margin-bottom: 0;
+}
+
+.todo-task:hover .is-invisible-desktop {
+    visibility: visible !important;
+
+    animation: fadeIn;
+    animation-duration: 200ms;
 }

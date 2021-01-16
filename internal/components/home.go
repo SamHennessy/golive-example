@@ -11,8 +11,9 @@ import (
 
 type Home struct {
 	golive.LiveComponentWrapper
-	Form *golive.LiveComponent
-	ds   *domain.Service
+	Form     *golive.LiveComponent
+	ds       *domain.Service
+	ShowMenu bool
 }
 
 func NewHome(ds *domain.Service) func(ctx context.Context) *golive.LiveComponent {
@@ -34,4 +35,8 @@ func (c *Home) TemplateHandler(_ *golive.LiveComponent) string {
 	}
 
 	return string(fileBytes)
+}
+
+func (c *Home) HandleToggleMenu() {
+	c.ShowMenu = !c.ShowMenu
 }

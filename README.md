@@ -9,7 +9,7 @@ Often the features are needlessly complicated (for example, the real-time clock)
 GoLive is a new project with lots of opportunities to contribute code. As such,  I'm also using this project to help push the development of GoLive by giving me inspiration for new features.
 
 ### [Live Demo](https://golive-example.herokuapp.com/)
-*Hosted on Heroku hobby account as a Docker container. Initial load may be slow due to Heroku putting the container to sleep.*
+*Hosted on Heroku Free account as a Docker container. Initial load may be slow due to Heroku putting the container to sleep.*
 
 ## Technology
 
@@ -37,7 +37,7 @@ As a personal goal, I wanted to see what I could do without using any JavaScript
 
 ## Working With The Project
 
-To see how to work with the code in the project, build, run, etc. Link in the [Makefile](./Makefile)
+To see how to work with the code in the project, build, run, etc. Look in the [Makefile](./Makefile)
 
 ## TODO
 
@@ -48,9 +48,6 @@ To see how to work with the code in the project, build, run, etc. Link in the [M
 - Global stats? E.g. active sessions, messages in and out, memory usage, etc.
 - Use Pub Sub to show server pushed updates
 - Get users local for clock
-- Mark all done
-- Delete
-- Delete all
 - Change task
 
 ### More Apps

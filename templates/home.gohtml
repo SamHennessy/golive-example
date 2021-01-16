@@ -7,13 +7,13 @@
             Example For GoLive
         </div>
 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <a role="button" class="navbar-burger {{- if .ShowMenu }} is-active{{end}}" aria-label="menu" aria-expanded="false" go-live-click="HandleToggleMenu">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
         </a>
     </div>
-    <div class="navbar-menu">
+    <div class="navbar-menu {{- if .ShowMenu }} is-active{{end}}">
         <div class="navbar-end">
             <a class="navbar-item" href="https://github.com/SamHennessy/golive-example">
                 GitHub
