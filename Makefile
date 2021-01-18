@@ -4,10 +4,12 @@
 GOFMT ?= gofmt
 PORT ?= 3000
 
+# Build binary
 .PHONY: build
 build:
 	go build -o ./bin/web ./cmd/web
 
+# Run binary
 run:
 	PORT=$(PORT) ./bin/web
 
@@ -16,7 +18,7 @@ run:
 lint:
 	golangci-lint run
 
-# format code in a way the linter will be happy
+# Format code in a way the linter will be happy
 .PHONY: format
 format:
 	go mod tidy
@@ -42,16 +44,19 @@ pkg:
 pkgrun:
 	docker run --rm -p $(PORT):$(PORT) --env PORT=$(PORT) golive-example:local
 
+# Push container image to Heroku
 .PHONY: push
 push:
 	go mod vendor
 	heroku container:push web -a golive-example
 	rm -fr vendor
 
+# Deploy container image to Heroku
 .PHONY: deploy
 deploy:
 	heroku container:release web -a golive-example
 
+# Follow Heroku container logs
 .PHONY: hlog
 hlog:
 	heroku logs --tail -a golive-example
