@@ -3,13 +3,9 @@
 ############################
 FROM golang:1.15-buster as builder
 
-# Install git.
-# Git is required for fetching the dependencies.
-#RUN apk update && apk add --no-cache git ca-certificates build-base && update-ca-certificates
-
 # Create appuser.
 RUN useradd -ms /bin/bash appuser
-WORKDIR /home/appuser
+WORKDIR /src
 
 # Build binary
 COPY . .
@@ -25,9 +21,9 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc/passwd /etc/passwd
 
 # Copy our static files and executable.
-COPY --from=builder /home/appuser/bin/web /web
-COPY --from=builder /home/appuser/templates /templates
-COPY --from=builder /home/appuser/public /public
+COPY --from=builder /src/bin/web /web
+COPY --from=builder /src/templates /templates
+COPY --from=builder /src/public /public
 
 # Use an unprivileged user.
 USER appuser
